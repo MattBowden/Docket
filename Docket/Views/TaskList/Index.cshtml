@@ -1,0 +1,23 @@
+﻿@model IEnumerable<Docket.Models.TaskList>
+@{
+    ViewBag.Title = "Task List Manager";
+}
+
+<h2>Task List Manager</h2>
+
+    <table class="table">
+        <tr>
+            <th>Name</th>
+            <th>Last Updated</th>
+        </tr>
+@foreach (var item in Model)
+{
+        <tr>
+            <td>@item.Name</td>
+            <td>@item.DateModified</td>
+            <td>@Html.ActionLink("View", "Tasks", new {Id = item.Id }, new { @class="btn-sm btn-primary"})</td>
+        </tr>
+}
+    </table>
+
+@section Scripts{}

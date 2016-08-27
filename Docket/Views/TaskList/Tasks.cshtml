@@ -1,0 +1,86 @@
+﻿@model Docket.Models.TaskList
+@{
+    ViewBag.Title = "Tasks";
+}
+
+<style>
+    /*Here We will add some css for style our treeview*/
+    .collapse {
+        width: 15px;
+        background-image: url('../../Images/ui-icons_454545_256x240.png');
+        background-repeat: no-repeat;
+        background-position: -36px -17px;
+        display: inline-block;
+        cursor: pointer;
+    }
+
+    .expand {
+        width: 15px;
+        background-image: url('../../Images/ui-icons_454545_256x240.png');
+        background-repeat: no-repeat;
+        background-position: -50px -17px;
+        display: inline-block;
+        cursor: pointer;
+    }
+
+    .selected {
+        background-color: #66ffff;
+    }
+
+    .table-hover > tbody > tr.selected:hover > td {
+     background-color: #00ffff;
+ }
+
+    
+    
+</style>
+
+<h2>@Model.Name</h2>
+
+<div>
+    <div class="treeview">
+        @if (Model != null && Model.Tasks.Count > 0)
+        {
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Note</th>
+                        <th>User</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @TreeView.GetTreeView(Model.Tasks, Model.Tasks.FirstOrDefault().ParentTaskId)
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+
+@Html.ActionLink("Back", "Index", null, new { @class = "btn-sm btn-primary" })
+
+@* Here We need some Jquery code for make this treeview collapsible *@
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+
+            $(".treeview tbody tr[data-level!='0']").hide();
+
+            $(".collapsible").click(function (e) {
+                e.preventDefault();
+                $(this).toggleClass("collapse expand");
+                var parentTaskId = $(this).closest("tr").attr('data-taskId');
+                $(".treeview tr[data-parentTaskId='" + parentTaskId + "']").toggle();
+            });
+
+            $(".treeview tbody tr").click(function (e) {
+                e.preventDefault();
+                if (!$(event.target).is('span')) {
+                    $(".treeview tbody tr").removeClass("selected");
+                    $(this).addClass("selected");
+                }
+            });
+
+        });
+    </script>
+}

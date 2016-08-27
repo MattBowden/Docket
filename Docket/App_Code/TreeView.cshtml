@@ -1,0 +1,29 @@
+﻿@helper GetTreeView(ICollection<Docket.Models.Task> tasks, int parentId, int levelId = 0)
+{
+
+foreach (var task in tasks.Where(t => t.ParentTaskId.Equals(parentId)))
+{
+    var subTask = tasks.Where(t => t.ParentTaskId.Equals(task.Id)).Count();
+
+        <tr data-taskId="@task.Id" data-level="@levelId" data-parentTaskId="@task.ParentTaskId">
+
+            @if (subTask > 0)
+            {
+                <td style="padding-left:@levelId.ToString()9px" class=""><span class="collapse collapsible">&nbsp;</span><strong>@task.Name</strong></td>
+            }
+            else
+            {
+                <td style="padding-left:@levelId.ToString()9px"><span style="width:15px; display:inline-block">&nbsp;</span>@task.Name</td>
+            }
+
+            <td>@task.Note</td>
+            <td>@task.User.Name</td>
+            @if (subTask > 0)
+            {
+                ++levelId;
+                @GetTreeView(tasks, task.Id, levelId)
+                --levelId;
+            }
+        </tr>
+}
+}
