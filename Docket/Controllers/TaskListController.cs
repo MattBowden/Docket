@@ -11,7 +11,6 @@ namespace Docket.Controllers
     {
         private DocketContext db = new DocketContext();
 
-        // GET: TaskList
         public ActionResult Index()
         {
             return View(db.TaskLists.ToList());
